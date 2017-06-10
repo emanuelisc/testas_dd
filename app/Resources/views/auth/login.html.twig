@@ -1,0 +1,124 @@
+{% extends 'base.html.twig' %}
+
+{% block meta %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+{% endblock %}
+
+{% block stylesheets %}
+    <!-- Bootstrap Core CSS -->
+    <link href="https://rawgit.com/BlackrockDigital/startbootstrap-stylish-portfolio/master/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="https://rawgit.com/BlackrockDigital/startbootstrap-stylish-portfolio/master/css/stylish-portfolio.css" rel="stylesheet">
+    <link href="https://rawgit.com/BlackrockDigital/startbootstrap-sb-admin-2/master/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+    <link href="https://rawgit.com/BlackrockDigital/startbootstrap-sb-admin-2/master/dist/css/sb-admin-2.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="https://rawgit.com/BlackrockDigital/startbootstrap-stylish-portfolio/master/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="https://rawgit.com/BlackrockDigital/startbootstrap-stylish-portfolio/master/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+{% endblock %}
+
+{% block body %}
+
+    <!-- Navigation -->
+    <a id="menu-toggle" href="#" class="btn btn-dark btn-lg toggle"><i class="fa fa-bars"></i></a>
+    <nav id="sidebar-wrapper">
+        <ul class="sidebar-nav">
+            <a id="menu-close" href="#" class="btn btn-light btn-lg pull-right toggle"><i class="fa fa-times"></i></a>
+            <li class="sidebar-brand">
+                <a href="{{ url('homepage') }}" onclick=$("#menu-close").click();>Kaunas is waiting</a>
+            </li>
+            <li>
+                <a href="{{ url('homepage') }}" onclick=$("#menu-close").click();>Home</a>
+            </li>
+            <li>
+                <a href="{{ path('login') }}" onclick=$("#menu-close").click();>LogIn</a>
+            </li>
+            <li>
+                <a href="{{ path('user_registration') }}" onclick=$("#menu-close").click();>Register</a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- /.login-logo -->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="login-panel panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Please Sign In</h3>
+                    </div>
+                    <div class="panel-body">
+                        <form role="form" method="POST" action="{{ path('security_login_check') }}">
+                            {% if error %}
+                                <div class="alert alert-danger">
+                                    {{ error.messageKey|trans(error.messageData) }}
+                                </div>
+                            {% endif %}
+                            <fieldset>
+                                <div class="form-group has-feedback">
+                                    <input id="email" type="email" class="form-control" name="_email" value="{{ last_username }}" placeholder="Email">
+                                    <span class="glyphicon glyphicon-envelope form-control-feedback" style="color: black"></span>
+                                </div>
+                                <div class="form-group has-feedback">
+                                    <input id="password" type="password" class="form-control" name="_password" placeholder="Password">
+                                    <span class="glyphicon glyphicon-lock form-control-feedback" style="color: black"></span>
+                                </div>
+                                <div class="checkbox">
+                                    <label>
+                                        <input name="remember" type="checkbox" value="Remember Me">Remember Me
+                                    </label>
+                                </div>
+                                <!-- Change this to a button or input when using this as a form -->
+                                <button type="submit" class="btn btn-lg btn-success btn-block">Login</button>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    <!-- jQuery -->
+    <script src="https://rawgit.com/BlackrockDigital/startbootstrap-stylish-portfolio/master/js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="https://rawgit.com/BlackrockDigital/startbootstrap-stylish-portfolio/master/js/bootstrap.min.js"></script>
+
+    <script src="https://rawgit.com/BlackrockDigital/startbootstrap-sb-admin-2/master/vendor/jquery/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="https://rawgit.com/BlackrockDigital/startbootstrap-sb-admin-2/master/vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <script src="https://rawgit.com/BlackrockDigital/startbootstrap-sb-admin-2/master/vendor/metisMenu/metisMenu.min.js"></script>
+
+    <script src="https://rawgit.com/BlackrockDigital/startbootstrap-sb-admin-2/master/dist/js/sb-admin-2.min.js"></script>
+
+
+    <script>
+        // Closes the sidebar menu
+        $("#menu-close").click(function(e) {
+            e.preventDefault();
+            $("#sidebar-wrapper").toggleClass("active");
+        });
+        // Opens the sidebar menu
+        $("#menu-toggle").click(function(e) {
+            e.preventDefault();
+            $("#sidebar-wrapper").toggleClass("active");
+        });
+    </script>
+{% endblock %}

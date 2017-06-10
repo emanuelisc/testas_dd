@@ -1,0 +1,157 @@
+{% extends 'admin/adminbase.html.twig' %}
+{% set order_count = orderCount[0].driver_count %}
+{% block meta %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+{% endblock %}
+
+{% block stylesheets %}
+    <!-- Bootstrap Core CSS -->
+    <link href="https://rawgit.com/BlackrockDigital/startbootstrap-sb-admin-2/master/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="https://rawgit.com/BlackrockDigital/startbootstrap-sb-admin-2/master/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+
+    <!-- DataTables CSS -->
+    <link href="https://rawgit.com/BlackrockDigital/startbootstrap-sb-admin-2/master/vendor/datatables-plugins/dataTables.bootstrap.css" rel="stylesheet">
+
+    <!-- DataTables Responsive CSS -->
+    <link href="https://rawgit.com/BlackrockDigital/startbootstrap-sb-admin-2/master/vendor/datatables-responsive/dataTables.responsive.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="https://rawgit.com/BlackrockDigital/startbootstrap-sb-admin-2/master/dist/css/sb-admin-2.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="https://rawgit.com/BlackrockDigital/startbootstrap-sb-admin-2/master/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+{% endblock %}
+
+{% block body %}
+    <div>
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Tables</h1>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Full information about driver work hours and car
+                    </div>
+                    <div class="form-group">
+                        {{ form_start(form) }}
+                        <div class="col-md-2">
+                            {{ form_row(form.user) }}
+                        </div>
+                        <div class="col-md-2">
+                            {{ form_row(form.dateToDeliver) }}
+                        </div>
+                        <div class="col-md-8" style="margin-top: 25px; margin-bottom: 10px">
+                            <button type="submit" class="btn btn-outline btn-default">Search</button>
+                            <button type="button" class="btn btn-outline btn-default"><a href="{{ path('tables') }}">Clear</a></button>
+                        </div>
+                        {{ form_end(form) }}
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
+                            <thead>
+                            <tr>
+                                <th>Nr.</th>
+                                <th>Date</th>
+                                <th>Route</th>
+                                <th>Left the terminal</th>
+                                <th>Speedometer after</th>
+                                <th>Arrived to the client</th>
+                                <th>Discharge min.</th>
+                                <th>Left the client</th>
+                                <th>Came back to terminal</th>
+                                <th>Speedometer now</th>
+                                <th>Distance</th>
+                                <th>Fuel</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for order in orders %}
+                                {% if order.driver.distance != null %}
+                            <tr class="odd gradeX">
+                                <td>{{ order.id }}</td>
+                                <td>{{ order.dateToDeliver|date("y-m-d") }}</td>
+                                <td>{{ order.address }}</td>
+                                <td>{{ order.driver.whenLeaveTerminal|date("H:i") }}</td>
+                                <td>{{ order.driver.mileageBefore }}</td>
+                                <td>{{ order.driver.whenCameToCustomer|date("H:i") }}</td>
+                                <td>{{ order.driver.whenLoadOut }}</td>
+                                <td>{{ order.driver.whenLeaveCustomer|date("H:i")}}</td>
+                                <td>{{ order.driver.whenCameToTerminal|date("H:i") }}</td>
+                                <td>{{ order.driver.mileageNow }}</td>
+                                <td>{{ order.driver.distance }}</td>
+                                <td>{{ ((((((order.driver.whenCameToCustomer|date("H") * 60) + order.driver.whenCameToCustomer|date("i"))
+                                         - ((order.driver.whenLeaveTerminal|date("H") * 60) + order.driver.whenLeaveTerminal|date("i")) )
+                                         + (((order.driver.whenCameToTerminal|date("H") * 60) + order.driver.whenCameToTerminal|date("i"))
+                                         - ((order.driver.whenLeaveCustomer|date("H") * 60) + order.driver.whenLeaveCustomer|date("i")) ))
+                                         * (order.car.driving / 60))
+                                    +   ((order.driver.whenLoadOut) * (order.car.discharging / 60))
+                                    +   (((((order.driver.whenLeaveCustomer|date("H") * 60) + order.driver.whenLeaveCustomer|date("i"))
+                                        - ((order.driver.whenCameToCustomer|date("H") * 60) + order.driver.whenCameToCustomer|date("i"))
+                                        - (order.driver.whenLoadOut)))
+                                        * (order.car.standing / 60))
+                                    )|round(2, 'floor')
+                                    }}</td>
+                            </tr>
+                            {% endif %}
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        <!-- /.table-responsive -->
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /#page-wrapper -->
+{% endblock %}
+
+{% block javascripts %}
+    <!-- jQuery -->
+    <script src="https://rawgit.com/BlackrockDigital/startbootstrap-sb-admin-2/master/vendor/jquery/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="https://rawgit.com/BlackrockDigital/startbootstrap-sb-admin-2/master/vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="https://rawgit.com/BlackrockDigital/startbootstrap-sb-admin-2/master/vendor/metisMenu/metisMenu.min.js"></script>
+
+    <!-- DataTables JavaScript -->
+    <script src="https://rawgit.com/BlackrockDigital/startbootstrap-sb-admin-2/master/vendor/datatables/js/jquery.dataTables.min.js"></script>
+    <script src="https://rawgit.com/BlackrockDigital/startbootstrap-sb-admin-2/master/vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
+    <script src="https://rawgit.com/BlackrockDigital/startbootstrap-sb-admin-2/master/vendor/datatables-responsive/dataTables.responsive.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="https://rawgit.com/BlackrockDigital/startbootstrap-sb-admin-2/master/dist/js/sb-admin-2.js"></script>
+
+    <!-- Page-Level Demo Scripts - Tables - Use for reference -->
+    <script>
+        $(document).ready(function() {
+            $('#dataTables-example').DataTable({
+                responsive: true
+            });
+        });
+    </script>
+{% endblock %}
